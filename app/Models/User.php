@@ -38,6 +38,13 @@ class User extends Authenticatable
     ];
 
     /**
+     * The recently generated access token for the user
+     *
+     * @var string
+     */
+    protected $accessToken = null;
+
+    /**
      * The attributes that should be cast.
      *
      * @var array
@@ -45,4 +52,24 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Return the recently generated access token for the user
+     *
+     * @return string|null
+     */
+    public function getCurrentAccessTokenAttribute(): ?string
+    {
+        return $this->accessToken ?? null;
+    }
+
+    /**
+     * Generate a new token to setup on the user object
+     *
+     * @return void
+     */
+    public function generateNewAccessToken(): void
+    {
+        $this->accessToken = ($this->createToken('general'))->plainTextToken;
+    }
 }
